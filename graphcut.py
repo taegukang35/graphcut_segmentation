@@ -5,10 +5,11 @@ from collections import deque
 
 
 class Segmentation:
-    def __init__(self, img: np.ndarray, objLabel, bkgLabel):
+    def __init__(self, img: np.ndarray, objLabel, bkgLabel,alpha):
         self.img = img
         self.bkg = bkgLabel
         self.obj = objLabel
+        self.alpha = alpha
 
     def B(self, p, q):
         return 100 * exp(-pow(int(p) - int(q), 2) / (2 * pow(30, 2)))
@@ -37,7 +38,6 @@ class Segmentation:
         r, c = self.img.shape
         V = r * c + 2
         G = np.zeros((V,V))
-        alpha = 1
         K = 1e9
 
         # Regional Cost
@@ -52,8 +52,8 @@ class Segmentation:
                     G[1 + c * i + j][V - 1] = K
                 else:
                     R_bkg, R_obj = self.R(self.img[i][j], obj_gmm, bkg_gmm)
-                    G[0][1 + c * i + j] = alpha * R_obj
-                    G[1 + c * i + j][V - 1] = alpha * R_bkg
+                    G[0][1 + c * i + j] = self.alpha * R_obj
+                    G[1 + c * i + j][V - 1] = self.alpha * R_bkg
 
         # Boundary Cost
         for i in range(r):
