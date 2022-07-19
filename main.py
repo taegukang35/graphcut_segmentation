@@ -11,5 +11,5 @@ bkg = [(0,0),(1,0)]
 obj = [(2,1),(2,2)]
 
 #image segmentation via graph-cut
-S = Segmentation(img,obj,bkg)
+S = Segmentation(img,obj,bkg,0.1)
 mask = S.run() 
